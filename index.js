@@ -1,10 +1,7 @@
-//////////
-const SCALE = 5
-const EQ = x => Math.sqrt(x / SCALE, 2);
-const HUMAN_READABLE = "y = sqrt(x)"
-//////////
+const SCALE = 5;
+const computeY = x => Math.sqrt(x / SCALE);
+const HUMAN_READABLE = "y = sqrt(x)";
 
-// graph
 setMap(map`
 ........................................
 ........................................
@@ -45,10 +42,9 @@ setMap(map`
 ........................................
 ........................................
 ........................................
-........................................`)
+`);
 
-// point
-const point = "z"
+const point = "z";
 setLegend([point, bitmap`
 0000000000000000
 0000000000000000
@@ -65,48 +61,53 @@ setLegend([point, bitmap`
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`])
+0000000000000000
+`]);
 
-const w = width() - 1
-const h = height() - 1
+const widthLimit = width() - 1;
+const heightLimit = height() - 1;
+
 const drawGraph = () => {
-  for (let x = 0; x < w; x++) {
-    const y = EQ(x)
+  for (let x = 0; x < widthLimit; x++) {
+    const y = computeY(x);
 
     try {
-      addSprite(x, h - Math.floor(y * SCALE), point)
-    } catch(e) {}
-  }
-}
-
-const drawTicks = () => {
-  // X-axis ticks
-  for (let x = 0; x < w; x += SCALE) {
-    try {
-      const strX = x.toString()
-      if (strX.length > 1) {
-        for (let i = 0; i < strX.length; i++) {
-          addText(strX[i], { x: x + 2, y: 0 + i, color: color`5` }); 
-        }
-      } else {
-        addText(x.toString(), { x: x + 2, y: 0, color: color`5` });  
-      }
-    } catch(e) {}
-  }
-  
-  // Y-axis ticks
-  for (let y = 0; y < h; y += SCALE) {
-    try {
-      addText(Math.floor(h - y).toString(), { x: 2, y: y + 2, color: color`3` });
-      addSprite(-1, y, point);
-    } catch(e) {}
+      addSprite(x, heightLimit - Math.floor(y * SCALE), point);
+    } catch (error) {
+      // Error handling
+    }
   }
 };
 
-drawGraph()
-drawTicks()
+const drawTicks = () => {
+  // X-axis ticks
+  for (let x = 0; x < widthLimit; x += SCALE) {
+    try {
+      const label = x.toString();
+      const yOffset = label.length > 1 ? [...label].map((_, i) => i) : [0];
+      yOffset.forEach(offset => 
+        addText(label[offset], { x: x + 2, y: offset, color: color`5` })
+      );
+    } catch (error) {
+      // Error handling
+    }
+  }
+  
+  // Y-axis ticks
+  for (let y = 0; y < heightLimit; y += SCALE) {
+    try {
+      addText(Math.floor(heightLimit - y).toString(), { x: 2, y: y + 2, color: color`3` });
+      addSprite(-1, y, point);
+    } catch (error) {
+      // Error handling
+    }
+  }
+};
+
+drawGraph();
+drawTicks();
 
 addText(HUMAN_READABLE, {
   x: 5,
   y: 15
-})
+});
