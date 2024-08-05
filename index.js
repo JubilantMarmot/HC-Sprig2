@@ -91,7 +91,6 @@ const drawTicks = () => {
       } else {
         addText(x.toString(), { x: x + 2, y: 0, color: color`5` });  
       }
-      addSprite(x, h, point);
     } catch(e) {}
   }
   
