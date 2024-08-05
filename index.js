@@ -79,7 +79,33 @@ const drawGraph = () => {
   }
 }
 
+const drawTicks = () => {
+  // X-axis ticks
+  for (let x = 0; x < w; x += SCALE) {
+    try {
+      const strX = x.toString()
+      if (strX.length > 1) {
+        for (let i = 0; i < strX.length; i++) {
+          addText(strX[i], { x: x + 2, y: 0 + i, color: color`5` }); 
+        }
+      } else {
+        addText(x.toString(), { x: x + 2, y: 0, color: color`5` });  
+      }
+      addSprite(x, h, point);
+    } catch(e) {}
+  }
+  
+  // Y-axis ticks
+  for (let y = 0; y < h; y += SCALE) {
+    try {
+      addText(Math.floor(h - y).toString(), { x: 2, y: y + 2, color: color`3` });
+      addSprite(-1, y, point);
+    } catch(e) {}
+  }
+};
+
 drawGraph()
+drawTicks()
 
 addText(HUMAN_READABLE, {
   x: 5,
